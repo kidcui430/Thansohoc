@@ -125,7 +125,7 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
         so_nam, (tk_nam, lk_nam) = app.tinh_nam_ca_nhan(ngay_sinh_str, 2026)
 
         # Hiển thị kết quả đẹp mắt
-        st.balloons() # Hiệu ứng bóng bay chúc mừng
+        st.snow()
         
         st.success(f"Chào bạn **{ten_nhap.upper()}** (Sinh ngày: {ngay_hien_thi})")
         
@@ -152,3 +152,4 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
 st.write("---")
 
 st.caption("KID. TRIẾT VŨ - Chúc mừng năm mới Xuân Bính Ngọ 2026")
+
