@@ -83,7 +83,7 @@ with col2: # Chỉ làm việc với cột giữa
     # --- LỰA CHỌN ẢNH ĐẸP (Anh thích cái nào thì bỏ dấu # ở đầu dòng đó) ---
     
     # Lựa chọn 1: Cành mai vàng chụp cận cảnh, xóa phông (Rất nghệ thuật)
-    img_url = "https://i.pinimg.com/1200x/2a/9a/3d/2a9a3dafd59e418af4d257dea6407523.jpg"
+   img_url = "https://i.pinimg.com/1200x/8a/95/b4/8a95b4423db111f3d5ec61466d459418.jpg"
     
     # Lựa chọn 2: Không khí Tết ấm cúng với trà và hoa (Nhìn rất Chill)
     # img_url = "https://images.unsplash.com/photo-1643124915187-7450d741700c?q=80&w=1000&auto=format&fit=crop"
@@ -101,7 +101,7 @@ st.write("---")
 col1, col2 = st.columns(2)
 
 with col1:
-    ten_nhap = st.text_input("Nhập Họ và Tên của bạn:", placeholder="Ví dụ: TRẦN TRÙNG TRỤC")
+    ten_nhap = st.text_input("Nhập Họ và Tên của bạn:", placeholder="Ví dụ: Kid - cùi")
 
 with col2:
     ngay_sinh_input = st.date_input("Chọn Ngày Sinh:", min_value=datetime(1950, 1, 1))
@@ -150,4 +150,5 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
             st.write(lk_nam) 
 
 st.write("---")
+
 st.caption("KID. TRIẾT VŨ - Chúc mừng năm mới Xuân Bính Ngọ 2026")
