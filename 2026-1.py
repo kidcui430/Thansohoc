@@ -83,7 +83,7 @@ with col2: # Chỉ làm việc với cột giữa
     # --- LỰA CHỌN ẢNH ĐẸP (Anh thích cái nào thì bỏ dấu # ở đầu dòng đó) ---
     
     # Lựa chọn 1: Cành mai vàng chụp cận cảnh, xóa phông (Rất nghệ thuật)
-   img_url = "https://i.pinimg.com/1200x/8a/95/b4/8a95b4423db111f3d5ec61466d459418.jpg"
+    img_url = "https://i.pinimg.com/1200x/8a/95/b4/8a95b4423db111f3d5ec61466d459418.jpg"
     
     # Lựa chọn 2: Không khí Tết ấm cúng với trà và hoa (Nhìn rất Chill)
     # img_url = "https://images.unsplash.com/photo-1643124915187-7450d741700c?q=80&w=1000&auto=format&fit=crop"
@@ -152,4 +152,5 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
 st.write("---")
 
 st.caption("KID. TRIẾT VŨ - Chúc mừng năm mới Xuân Bính Ngọ 2026")
+
 
