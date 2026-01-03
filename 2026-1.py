@@ -173,4 +173,5 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
             st.caption("*Lưu ý: Tuổi âm tính theo năm Dương lịch nhập vào (chưa xét tháng sinh âm lịch chi tiết).*")
 
 st.write("---")
-st.caption("Ứng dụng được phát triển bởi Kid - 2026")
+
+st.caption("By Kid - Bính Ngọ 2026")
