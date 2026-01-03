@@ -122,6 +122,7 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
         app_tv = TuVi() # Gọi thêm class Tử Vi
         
         ns_str = ngay_sinh_input.strftime("%d%m%Y")
+        ngay_hien_thi = ngay_sinh_input.strftime("%d/%m/%Y")
         nam_sinh = ngay_sinh_input.year
         ngay_sinh = ngay_sinh_input.day
         thang_sinh = ngay_sinh_input.month
@@ -139,7 +140,7 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
 
         # Hiệu ứng
         rain(emoji="💸", font_size=35, falling_speed=5, animation_length="infinite")
-        st.success(f"XIN CHÀO GIA CHỦ **{ten_nhap}**")
+        st.success(f"XIN CHÀO GIA CHỦ : **{ten_nhap}**  \n(Sinh ngày: {ngay_hien_thi})")
 
         # HIỂN THỊ 4 TAB
         t1, t2, t3, t4 = st.tabs(["🌟 Số Chủ Đạo", "💎 Sứ Mệnh", "📅 Năm 2026", "☯️ Tử Vi & Vận Hạn"])
@@ -173,5 +174,4 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
             st.caption("*Lưu ý: Tuổi âm tính theo năm Dương lịch nhập vào (chưa xét tháng sinh âm lịch chi tiết).*")
 
 st.write("---")
-
-st.caption("By Kid - Bính Ngọ 2026")
+st.caption("KID. TRIẾT VŨ - Chúc mừng năm mới Xuân Bính Ngọ 2026")
