@@ -11,20 +11,12 @@ st.set_page_config(page_title="Gieo Quẻ Đầu Năm 2026", page_icon="🌸", l
 class ThanSoHoc:
     def __init__(self, file_path='data_thansohoc.xlsx'):
         try:
-            self.df = pd.read_excel(file_path)
+            self.df = pd.read_excel(file_path) # Mặc định đọc Sheet 1
             self.data_map = self.df.set_index('So')['Loi_Khuyen'].to_dict()
             self.tu_khoa_map = self.df.set_index('So')['Tu_Khoa'].to_dict()
         except Exception:
             self.data_map = {}
             self.tu_khoa_map = {}
-
-        self.alphabet_map = {
-            'A': 1, 'J': 1, 'S': 1, 'B': 2, 'K': 2, 'T': 2,
-            'C': 3, 'L': 3, 'U': 3, 'D': 4, 'M': 4, 'V': 4,
-            'E': 5, 'N': 5, 'W': 5, 'F': 6, 'O': 6, 'X': 6,
-            'G': 7, 'P': 7, 'Y': 7, 'H': 8, 'Q': 8, 'Z': 8,
-            'I': 9, 'R': 9
-        }
 
     def rut_gon(self, n, keep_master=True):
         while n > 9:
@@ -43,8 +35,13 @@ class ThanSoHoc:
         return so, self.lay_noi_dung(so)
 
     def tinh_chi_so_su_menh(self, ho_ten):
+        alphabet_map = {
+            'A': 1, 'J': 1, 'S': 1, 'B': 2, 'K': 2, 'T': 2, 'C': 3, 'L': 3, 'U': 3,
+            'D': 4, 'M': 4, 'V': 4, 'E': 5, 'N': 5, 'W': 5, 'F': 6, 'O': 6, 'X': 6,
+            'G': 7, 'P': 7, 'Y': 7, 'H': 8, 'Q': 8, 'Z': 8, 'I': 9, 'R': 9
+        }
         ho_ten = ho_ten.upper()
-        tong = sum(self.alphabet_map.get(char, 0) for char in ho_ten)
+        tong = sum(alphabet_map.get(char, 0) for char in ho_ten)
         so = self.rut_gon(tong)
         return so, self.lay_noi_dung(so)
     
@@ -57,35 +54,43 @@ class ThanSoHoc:
             return so, self.lay_noi_dung(so)
         return 0, ("", "")
 
-# --- CLASS 2: TỬ VI & PHƯƠNG ĐÔNG (MỚI THÊM) ---
+# --- CLASS 2: TỬ VI (NÂNG CẤP ĐỌC EXCEL) ---
 class TuVi:
-    def __init__(self):
+    def __init__(self, file_path='data_thansohoc.xlsx'):
         self.can = ["Canh", "Tân", "Nhâm", "Quý", "Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ"]
         self.chi = ["Thân", "Dậu", "Tuất", "Hợi", "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi"]
-        # Data vận hạn năm 2026 (Bính Ngọ) cho 12 con giáp
-        self.van_han_2026 = {
-            "Tý": "⚠️ Xung Thái Tuế: Năm nay có nhiều biến động, cần cẩn trọng trong đi lại và giao tiếp. Tránh đầu tư mạo hiểm.",
-            "Sửu": "⚠️ Hại Thái Tuế: Dễ gặp chuyện thị phi, tiểu nhân quấy phá. Nên giữ mình, làm việc chắc chắn.",
-            "Dần": "✨ Tam Hợp (Dần - Ngọ - Tuất): Năm rất tốt để triển khai dự án lớn. Quý nhân phù trợ, công việc hanh thông.",
-            "Mão": "💥 Phá Thái Tuế: Cẩn thận rắc rối về giấy tờ, tình cảm gia đạo cần vun vén nhiều hơn.",
-            "Thìn": "🌤️ Bình Hòa: Mọi việc ở mức trung bình. Cần nỗ lực tự thân, không nên trông chờ may mắn.",
-            "Tỵ": "🔥 Năm bản lề: Có cơ hội thăng tiến nhưng cũng nhiều áp lực. Sức khỏe cần chú ý.",
-            "Ngọ": "⭐ Năm Tuổi (Trực Thái Tuế): Áp lực nhiều nhưng là cơ hội bứt phá ('Lửa thử vàng'). Cần kiên nhẫn.",
-            "Mùi": "❤️ Nhị Hợp: Rất tốt cho chuyện tình cảm và hợp tác làm ăn. Có tin vui đưa tới.",
-            "Thân": "🌤️ Bình Ổn: Tài lộc khá, công việc tiến triển đều. Nên học thêm kỹ năng mới.",
-            "Dậu": "💓 Đào Hoa: Nhân duyên tốt, người độc thân dễ gặp ý trung nhân. Tài chính khởi sắc.",
-            "Tuất": "✨ Tam Hợp: Thiên thời địa lợi. Năm cực tốt để mua nhà, tậu xe hoặc thăng chức.",
-            "Hợi": "🌊 Bình Hòa: Cần quản lý tài chính chặt chẽ. Tránh cho vay mượn lung tung."
-        }
+        
+        # --- ĐỌC DỮ LIỆU TỪ SHEET 'TuVi' ---
+        try:
+            # sheet_name='TuVi' là tên Sheet anh vừa tạo
+            self.df_tuvi = pd.read_excel(file_path, sheet_name='TuVi')
+            # Chuyển đổi thành Dictionary để tra cứu cho nhanh
+            # Cấu trúc: {'Tý': {'Tong_Quan': '...', 'Su_Nghiep': '...'}, 'Sửu': ...}
+            self.data_tuvi = self.df_tuvi.set_index('Con_Giap').T.to_dict()
+        except Exception as e:
+            # Nếu lỡ quên tạo sheet thì dùng data dự phòng này
+            self.data_tuvi = {} 
+            print(f"Lỗi đọc Sheet TuVi: {e}")
 
     def tinh_can_chi(self, nam_sinh):
-        """Tính Can Chi từ năm dương lịch"""
         can = self.can[nam_sinh % 10]
         chi = self.chi[nam_sinh % 12]
         return can, chi
 
+    def lay_luan_giai_tu_vi(self, chi):
+        # Lấy thông tin từ Excel dựa vào Chi (Tý, Sửu...)
+        data = self.data_tuvi.get(chi, None)
+        if data:
+            return data
+        else:
+            return {
+                "Tong_Quan": "Chưa có dữ liệu chi tiết.",
+                "Su_Nghiep": "Đang cập nhật...",
+                "Tai_Loc": "Đang cập nhật...",
+                "Tinh_Cam": "Đang cập nhật..."
+            }
+
     def tinh_cung_hoang_dao(self, ngay, thang):
-        """Tính cung hoàng đạo phương Tây"""
         if (thang == 3 and ngay >= 21) or (thang == 4 and ngay <= 19): return "Bạch Dương ♈"
         if (thang == 4 and ngay >= 20) or (thang == 5 and ngay <= 20): return "Kim Ngưu ♉"
         if (thang == 5 and ngay >= 21) or (thang == 6 and ngay <= 21): return "Song Tử ♊"
@@ -109,8 +114,8 @@ st.markdown("<h1 style='text-align: center; color: #d63031;'>🔮 GIEO QUẺ Đ�
 st.write("---")
 
 c1, c2 = st.columns(2)
-with c1: ten_nhap = st.text_input("Họ Tên:", placeholder="VD: KID TRIẾT VŨ")
-with c2: ngay_sinh_input = st.date_input("Ngày Sinh:", min_value=datetime(1950, 1, 1))
+with c1: ten_nhap = st.text_input("Họ Tên:", placeholder="VD: MIKAMI ...")
+with c2: ngay_sinh_input = st.date_input("Ngày Sinh:", min_value=datetime(1950, 1, 1), format="DD/MM/YYYY")
 
 if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
     if not ten_nhap:
@@ -119,7 +124,7 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
         ten_nhap = ten_nhap.upper()
         # Xử lý dữ liệu
         app_ts = ThanSoHoc()
-        app_tv = TuVi() # Gọi thêm class Tử Vi
+        app_tv = TuVi()
         
         ns_str = ngay_sinh_input.strftime("%d%m%Y")
         ngay_hien_thi = ngay_sinh_input.strftime("%d/%m/%Y")
@@ -127,20 +132,21 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
         ngay_sinh = ngay_sinh_input.day
         thang_sinh = ngay_sinh_input.month
         
-        # 1. Tính Thần số học
+        # Tính toán
         so_cd, (tk_cd, lk_cd) = app_ts.tinh_con_so_chu_dao(ns_str)
         so_sm, (tk_sm, lk_sm) = app_ts.tinh_chi_so_su_menh(ten_nhap)
         so_nam, (tk_nam, lk_nam) = app_ts.tinh_nam_ca_nhan(ns_str, 2026)
         
-        # 2. Tính Tử vi
         can, chi = app_tv.tinh_can_chi(nam_sinh)
         tuoi_am = 2026 - nam_sinh + 1
         cung_hd = app_tv.tinh_cung_hoang_dao(ngay_sinh, thang_sinh)
-        loi_khuyen_2026 = app_tv.van_han_2026.get(chi, "Bình thường")
+        
+        # Lấy dữ liệu chi tiết từ Excel
+        luan_giai_chi_tiet = app_tv.lay_luan_giai_tu_vi(chi)
 
         # Hiệu ứng
-        rain(emoji="💸", font_size=35, falling_speed=5, animation_length="infinite")
-        st.success(f"XIN CHÀO GIA CHỦ : **{ten_nhap}**  \n(Sinh ngày: {ngay_hien_thi})")
+        rain(emoji="✨", font_size=34, falling_speed=5, animation_length=5)
+        st.success(f"XIN CHÀO GIA CHỦ: **{ten_nhap}**  \n(Sinh ngày: {ngay_hien_thi})")
 
         # HIỂN THỊ 4 TAB
         t1, t2, t3, t4 = st.tabs(["🌟 Số Chủ Đạo", "💎 Sứ Mệnh", "📅 Năm 2026", "☯️ Tử Vi & Vận Hạn"])
@@ -160,18 +166,29 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
             st.warning("Lời khuyên năm nay:")
             st.write(lk_nam)
 
-        with t4: # Tab mới của anh đây
+        with t4:
             st.subheader(f"Tuổi Âm: {tuoi_am} tuổi - {can} {chi}")
             col_a, col_b = st.columns(2)
-            with col_a:
-                st.metric("Con Giáp", f"Tuổi {chi}")
-            with col_b:
-                st.metric("Cung Hoàng Đạo", cung_hd)
+            with col_a: st.metric("Con Giáp", f"Tuổi {chi}")
+            with col_b: st.metric("Cung Hoàng Đạo", cung_hd)
             
             st.write("---")
             st.markdown(f"#### 📜 Vận hạn năm Bính Ngọ 2026 cho tuổi {chi}:")
-            st.info(loi_khuyen_2026)
-            st.caption("*Lưu ý: Tuổi âm tính theo năm Dương lịch nhập vào (chưa xét tháng sinh âm lịch chi tiết).*")
+            
+            # --- PHẦN HIỂN THỊ CHI TIẾT CHUYÊN NGHIỆP ---
+            with st.expander("🚩 TỔNG QUAN NĂM 2026 (Bấm để xem)", expanded=True):
+                st.write(luan_giai_chi_tiet['Tong_Quan'])
+            
+            c_job, c_money = st.columns(2)
+            with c_job:
+                st.info("💼 **SỰ NGHIỆP**")
+                st.caption(luan_giai_chi_tiet['Su_Nghiep'])
+            with c_money:
+                st.success("💰 **TÀI LỘC**")
+                st.caption(luan_giai_chi_tiet['Tai_Loc'])
+                
+            st.warning(f"❤️ **TÌNH CẢM & GIA ĐẠO**: {luan_giai_chi_tiet['Tinh_Cam']}")
+            # -----------------------------------------------
 
 st.write("---")
-st.caption("KID. TRIẾT VŨ - Chúc mừng năm mới Xuân Bính Ngọ 2026")
+st.caption("KÍNH CHÚC NĂM MỚI AN KHANG, THỊNH VƯỢNG - KID-CUI")
