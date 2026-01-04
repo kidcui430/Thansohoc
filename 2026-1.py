@@ -162,8 +162,9 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
             st.write(lk_sm)
 
         with t3:
-            st.metric(f"NĂM CÁ NHÂN {so_nam}", "Dự báo Thần số học")
-            st.warning("Lời khuyên năm nay:")
+            st.metric("NĂM CÁ NHÂN 2026", so_nam, delta="Dự báo năm nay") 
+            
+            st.warning("LỜI KHUYÊN CHO NĂM NAY:")
             st.write(lk_nam)
 
         with t4:
