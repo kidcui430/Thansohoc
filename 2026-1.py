@@ -108,7 +108,28 @@ class TuVi:
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     img_url = "https://i.pinimg.com/1200x/8a/95/b4/8a95b4423db111f3d5ec61466d459418.jpg"
-    st.image(img_url, caption="Xuân Bính Ngọ 2026 - Vạn Sự Như Ý", use_container_width=True)
+    # 1. Hiển thị ảnh (Bỏ tham số caption đi nha anh)
+st.image(img_url, use_container_width=True)
+    
+    # 2. Tự chế Caption xịn bằng HTML
+st.markdown(
+        """
+        <div style="text-align: center; margin-top: 10px;">
+            <strong style="color: blue; font-size: 18px;">
+                Xuân Bính Ngọ 2026 - Vạn Sự Như Ý
+            </strong>
+            </b>
+            <br><br>
+            <span style="color: #ff9f43; font-style: italic;">
+                Cầu xin Thượng đế ban cho con sự tĩnh tại<br>
+                để chấp nhận những nghịch cảnh bất biến,<br>
+                dũng khí để xoay chuyển những điều trong tầm tay,<br>
+                và tuệ giác để phân định rõ ranh giới giữa hai điều đó.
+            </span>
+        </div>
+        """,
+unsafe_allow_html=True
+        )
 
 st.markdown("<h1 style='text-align: center; color: #d63031;'>🔮 GIEO QUẺ ĐẦU NĂM 🔮</h1>", unsafe_allow_html=True)
 st.write("---")
