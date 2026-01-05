@@ -135,7 +135,7 @@ st.markdown("<h1 style='text-align: center; color: #d63031;'>🔮 GIEO QUẺ Đ�
 st.write("---")
 
 c1, c2 = st.columns(2)
-with c1: ten_nhap = st.text_input("Họ Tên:", placeholder="VD: MIKAMI ...")
+with c1: ten_nhap = st.text_input("Họ Tên:", placeholder="VD: Doraemon N...")
 with c2: ngay_sinh_input = st.date_input("Ngày Sinh:", min_value=datetime(1950, 1, 1), format="DD/MM/YYYY")
 
 if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
@@ -213,4 +213,5 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
             # -----------------------------------------------
 
 st.write("---")
+
 st.caption("KÍNH CHÚC NĂM MỚI AN KHANG, THỊNH VƯỢNG - KID-CUI")
