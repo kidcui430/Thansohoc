@@ -11,10 +11,13 @@ st.set_page_config(page_title="Gieo Quẻ Đầu Năm 2026", page_icon="🌸", l
 class ThanSoHoc:
     def __init__(self, file_path='data_thansohoc.xlsx'):
         try:
-            self.df = pd.read_excel(file_path) # Mặc định đọc Sheet 1
+            self.df = pd.read_excel(file_path) # Đọc Sheet 1
+            # Lấy thêm cột Tieu_De
+            self.tieu_de_map = self.df.set_index('So')['Tieu_De'].to_dict()
             self.data_map = self.df.set_index('So')['Loi_Khuyen'].to_dict()
             self.tu_khoa_map = self.df.set_index('So')['Tu_Khoa'].to_dict()
         except Exception:
+            self.tieu_de_map = {} # Dự phòng nếu lỗi
             self.data_map = {}
             self.tu_khoa_map = {}
 
@@ -25,9 +28,11 @@ class ThanSoHoc:
         return n
 
     def lay_noi_dung(self, so):
+        # Lấy Tiêu đề, Từ khóa, Lời khuyên (3 món)
+        td = self.tieu_de_map.get(so, f"CON SỐ {so}") # Mặc định nếu chưa có Excel
         tk = self.tu_khoa_map.get(so, "")
         lk = self.data_map.get(so, "Chưa có dữ liệu cho số này.")
-        return tk, lk
+        return td, tk, lk 
 
     def tinh_con_so_chu_dao(self, ngay_sinh_str):
         numbers = [int(d) for d in ngay_sinh_str if d.isdigit()]
@@ -52,7 +57,7 @@ class ThanSoHoc:
             tong = self.rut_gon(ngay) + self.rut_gon(thang) + self.rut_gon(nam_hien_tai)
             so = self.rut_gon(tong, keep_master=False)
             return so, self.lay_noi_dung(so)
-        return 0, ("", "")
+        return 0, ("", "", "") # Trả về 3 giá trị rỗng
 
 # --- CLASS 2: TỬ VI (NÂNG CẤP ĐỌC EXCEL) ---
 class TuVi:
@@ -135,7 +140,7 @@ st.markdown("<h1 style='text-align: center; color: #d63031;'>🔮 GIEO QUẺ Đ�
 st.write("---")
 
 c1, c2 = st.columns(2)
-with c1: ten_nhap = st.text_input("Họ Tên:", placeholder="VD: Doraemon N...")
+with c1: ten_nhap = st.text_input("Họ Tên:", placeholder="VD: DoraeMon ...")
 with c2: ngay_sinh_input = st.date_input("Ngày Sinh:", min_value=datetime(1950, 1, 1), format="DD/MM/YYYY")
 
 if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
@@ -154,9 +159,9 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
         thang_sinh = ngay_sinh_input.month
         
         # Tính toán
-        so_cd, (tk_cd, lk_cd) = app_ts.tinh_con_so_chu_dao(ns_str)
-        so_sm, (tk_sm, lk_sm) = app_ts.tinh_chi_so_su_menh(ten_nhap)
-        so_nam, (tk_nam, lk_nam) = app_ts.tinh_nam_ca_nhan(ns_str, 2026)
+        so_cd, (td_cd, tk_cd, lk_cd) = app_ts.tinh_con_so_chu_dao(ns_str)
+        so_sm, (td_sm, tk_sm, lk_sm) = app_ts.tinh_chi_so_su_menh(ten_nhap)
+        so_nam, (td_nam, tk_nam, lk_nam) = app_ts.tinh_nam_ca_nhan(ns_str, 2026)
         
         can, chi = app_tv.tinh_can_chi(nam_sinh)
         tuoi_am = 2026 - nam_sinh + 1
@@ -173,19 +178,29 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
         t1, t2, t3, t4 = st.tabs(["🌟 Số Chủ Đạo", "💎 Sứ Mệnh", "📅 Năm 2026", "☯️ Tử Vi & Vận Hạn"])
         
         with t1:
-            st.metric("CON SỐ CHỦ ĐẠO", so_cd)
-            st.info(f"**{tk_cd}**")
-            st.write(lk_cd)
+            # Hiện cái Tiêu đề "SỐ 1 - NGƯỜI KHỞI XƯỚNG" to đùng lên màu đỏ
+            st.markdown(f"<h3 style='color: #d63031; text-align: center;'>{td_cd}</h3>", unsafe_allow_html=True)
+            
+            c_so, c_loi = st.columns([1, 3])
+            with c_so:
+                st.metric("CHỈ SỐ", so_cd)
+            with c_loi:
+                st.info(f"**Từ khóa:** {tk_cd}")
+                st.write(lk_cd)
             
         with t2:
-            st.metric("CHỈ SỐ SỨ MỆNH", so_sm)
-            st.info(f"**{tk_sm}**")
-            st.write(lk_sm)
+            st.markdown(f"<h3 style='color: #0984e3; text-align: center;'>{td_sm}</h3>", unsafe_allow_html=True)
+            
+            c_so, c_loi = st.columns([1, 3])
+            with c_so:
+                st.metric("CHỈ SỐ", so_sm)
+            with c_loi:
+                st.info(f"**Từ khóa:** {tk_sm}")
+                st.write(lk_sm)
 
         with t3:
-            st.metric("NĂM CÁ NHÂN 2026", so_nam, delta="Dự báo năm nay") 
-            
-            st.warning("LỜI KHUYÊN CHO NĂM NAY:")
+            st.metric("NĂM CÁ NHÂN 2026", so_nam, delta="LỜI KHUYÊN CHO NĂM NAY")
+            st.warning(f"**{td_nam}**") # Hiện tiêu đề năm cá nhân
             st.write(lk_nam)
 
         with t4:
@@ -213,5 +228,4 @@ if st.button("🧧 XEM LUẬN GIẢI NGAY 🧧", type="primary"):
             # -----------------------------------------------
 
 st.write("---")
-
 st.caption("KÍNH CHÚC NĂM MỚI AN KHANG, THỊNH VƯỢNG - KID-CUI")
